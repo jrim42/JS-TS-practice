@@ -1,59 +1,24 @@
-import { useState, useEffect } from "react"
+import React from "react"
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+
+import Home from "./routes/Home"
+import Detail from "./routes/Detail"
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [budget, setBudget] = useState(0);
-
-  useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
-      .then((response) => response.json())
-      .then((json) => {
-        setCoins(json);
-        setLoading(false) 
-      }); 
-  }, []);
-
-  const onChange = (event) => setBudget(event.target.value);
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setBudget();
-    console.log(budget);
-  }
-  const onSelect = (event) => {
-    console.log(event.target.value);
-  }
-
-  return (
-    <div>
-      <h3>the coins ({loading ? "" : coins.length})</h3>
-      <hr/>
-      {loading ? <strong>loading...</strong> : 
-        <select>
-          <option>select coin</option>
-          {coins.map((coin) => 
-            <option 
-              key={coin.id}
-              value={coin.quotes.USD.price}
-              symbol={coin.symbol}
-              onSelect={onSelect}>
-              {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
-            </option>)}
-        </select>
-      }
-      <br/>
-      <br/>
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          placeholder="USD"
-          value={budget}
-          onChange={onChange}
-        />
-        <button>submit</button>
-      </form>
-    </div>
-  );
+  return <Router>
+    <Switch>
+      <Route path="/movie/:id">
+        <Detail />
+      </Route>
+      <Route path="/">
+        <Home />
+      </Route>
+    </Switch>
+  </Router>;
 }
 
 export default App;
