@@ -1,36 +1,38 @@
-import { useEffect, useState } from "react";
-
-function Hello() {
-  // function destroyed() {
-  //   console.log("destroyed");
-  // }
-  // function created() {
-  //   console.log("created");
-  //   return destroyed;
-  // }
-  // useEffect(created, []);
-  useEffect(() => {
-    console.log("created");
-    return () => {
-      console.log("destroyed");
-    }
-  })
-  return <h1>hello</h1>
-}
+import { useState } from "react"
 
 function App() {
-  const [showing, setShowing] = useState(false);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
 
-  const onClick = () => setShowing((prev) => !prev);
-
+  const onChange = (event) => setToDo(event.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    setToDos((currentToDos) => [toDo, ...currentToDos]);
+    setToDo("");
+    console.log(toDos);
+  }
+  
   return (
     <div>
-      <button
-        onClick={onClick}
-        >
-        {showing ? "hide" : "show"}
-      </button>
-      {showing ? <Hello /> : null}
+      <h2>my todos: {toDos.length}</h2>
+      <form onSubmit={onSubmit}>
+        <input 
+          type="text" 
+          placeholder="todo" 
+          value={toDo}
+          onChange={onChange}
+        />
+        <button>add todo</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
