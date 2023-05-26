@@ -13,7 +13,7 @@ export default function Detail({ params }) {
   );
 }
 
-export async function getStaticProps({ params: { params } }) {
+export async function getServerSideProps({ params: { params } }) {
   return {
     props: {
       params,
